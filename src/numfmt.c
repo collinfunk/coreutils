@@ -27,6 +27,7 @@
 #include "mbswidth.h"
 #include "mcel.h"
 #include "quote.h"
+#include "sandbox.h"
 #include "skipchars.h"
 #include "system.h"
 #include "utf8.h"
@@ -1537,6 +1538,7 @@ main (int argc, char **argv)
 
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   locale_ok = !!setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
