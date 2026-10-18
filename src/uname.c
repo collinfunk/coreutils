@@ -37,7 +37,7 @@
 /* E.g., FreeBSD 4.5, NetBSD 1.5.2 */
 #   define UNAME_HARDWARE_PLATFORM HW_MODEL
 #   define UNAME_PROCESSOR HW_MACHINE_ARCH
-#  else
+#  elif ! HAVE_DECL_PLEDGE
 /* E.g., OpenBSD 3.0 */
 #   define UNAME_PROCESSOR HW_MODEL
 #  endif
@@ -46,6 +46,7 @@
 
 #include "system.h"
 #include "quote.h"
+#include "sandbox.h"
 #include "uname.h"
 
 /* The official name of this program (e.g., no 'g' prefix).  */
@@ -317,6 +318,7 @@ main (int argc, char **argv)
 
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
