@@ -1,0 +1,63 @@
+Description:
+Functions for platform-specific sandboxing interfaces.
+
+Files:
+lib/sandbox.c
+lib/sandbox.h
+
+Depends-on:
+attribute
+configmake
+fcntl-safer
+idx
+stdcountof-h
+str_startswith
+unistd-safer
+
+configure.ac:
+AC_ARG_ENABLE([sandbox],
+  [AS_HELP_STRING([--enable-sandbox@<:@=auto|yes|no@:>@],
+     [Enable the use of platform-specific sanboxing functionality.
+      The default, auto, uses sandboxing if it can be detected.])],
+  [gl_sandbox=no
+   case $enableval in
+     auto|yes|no) gl_sandbox=$enableval ;;
+     *) AC_MSG_ERROR([bad value $enableval for sandbox option.
+                      Options are: auto, yes, no.]) ;;
+   esac],
+  [gl_sandbox=auto])
+if test "$gl_sandbox" = yes || test "$gl_sandbox" = auto; then
+  AC_CHECK_HEADERS([linux/landlock.h])
+  if test "$ac_cv_header_linux_landlock_h" = yes; then
+    AC_DEFINE([HAVE_LINUX_LANDLOCK_H], [1],
+              [Define to 1 if you have the <linux/landlock.h> header file.])
+  else
+    AC_CHECK_HEADERS([sys/capsicum.h])
+    if test "$ac_cv_header_sys_capsicum_h" = yes; then
+      AC_DEFINE([HAVE_SYS_CAPSICUM_H], [1],
+                [Define to 1 if you have the <sys/capsicum.h> header file.])
+    else
+      AC_CHECK_DECLS([pledge])
+      if test "$gl_sandbox" = yes && test "$ac_cv_have_decl_pledge" = no; then
+        AC_MSG_ERROR([could not find a supported sandboxing interface as required
+                      by --enable-sandbox=yes.])
+      fi
+    fi
+  fi
+fi
+
+AM_CONDITIONAL([USE_SANDBOX], [test "$gl_sandbox" != no])
+
+Makefile.am:
+if USE_SANDBOX
+lib_SOURCES += sandbox.c sandbox.h
+endif
+
+Include:
+"sandbox.h"
+
+License:
+GPL
+
+Maintainer:
+all

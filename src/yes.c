@@ -27,6 +27,7 @@
 #include "full-write.h"
 #include "isapipe.h"
 #include "long-options.h"
+#include "sandbox.h"
 #include "splice.h"
 #include "unistd--.h"
 
@@ -191,6 +192,7 @@ main (int argc, char **argv)
 {
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
