@@ -22,6 +22,7 @@
 #include "cl-strtod.h"
 #include "dtimespec-bound.h"
 #include "long-options.h"
+#include "sandbox.h"
 #include "quote.h"
 #include "xnanosleep.h"
 
@@ -98,6 +99,7 @@ main (int argc, char **argv)
 
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
