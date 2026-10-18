@@ -24,6 +24,7 @@
 #include "cl-strtod.h"
 #include "octhexdigits.h"
 #include "quote.h"
+#include "sandbox.h"
 #include "unicodeio.h"
 #include "xprintf.h"
 
@@ -719,6 +720,7 @@ main (int argc, char **argv)
 
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
