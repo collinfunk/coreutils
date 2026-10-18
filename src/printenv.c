@@ -34,6 +34,7 @@
 
 #include "argmatch.h"  /* argmatch($QUOTING_STYLE).  */
 #include "system.h"
+#include "sandbox.h"
 #include "printenv.h"
 #include "xbinary-io.h"
 
@@ -103,6 +104,7 @@ main (int argc, char **argv)
 
   initialize_main (&argc, &argv);
   set_program_name (argv[0]);
+  sandbox_restrict_all ();
   setlocale (LC_ALL, "");
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
